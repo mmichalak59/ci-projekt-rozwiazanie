@@ -17,8 +17,8 @@ pipeline {
             steps {
                 sh 'pkill -f "python3 app.py" || true'
                 sh 'JENKINS_NODE_COOKIE=dontKillMe nohup python3 app.py > app.log 2>&1 &'
-                sh 'sleep 3 && curl -sf http://localhost:5000/'
-                echo 'Aplikacja dziala na porcie 5000'
+                sh 'sleep 4 && cat app.log'
+                sh 'curl -sf http://localhost:5000/ && echo "Aplikacja dziala na porcie 5000"'
             }
         }
     }
