@@ -8,14 +8,20 @@ pipeline {
                 echo "Galaz: ${env.GIT_BRANCH}"
             }
         }
-        stage('Build') {
+        stage('Instalacja Python') {
             steps {
-                sh "docker build -t narzedzia:${env.BUILD_NUMBER} ."
+                sh 'sudo apt-get install -y python3 || sudo yum install -y python3 || sudo dnf install -y python3'
+                sh 'python3 --version'
             }
         }
         stage('Testy') {
             steps {
-                sh "docker run --rm narzedzia:${env.BUILD_NUMBER} python3 test_app.py"
+                sh 'python3 test_app.py'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh "docker build -t narzedzia:${env.BUILD_NUMBER} ."
             }
         }
         stage('Deploy') {
