@@ -8,14 +8,14 @@ pipeline {
                 echo "Galaz: ${env.GIT_BRANCH}"
             }
         }
-        stage('Testy') {
-            steps {
-                sh 'python3 test_app.py'
-            }
-        }
         stage('Build') {
             steps {
                 sh "docker build -t narzedzia:${env.BUILD_NUMBER} ."
+            }
+        }
+        stage('Testy') {
+            steps {
+                sh "docker run --rm narzedzia:${env.BUILD_NUMBER} python3 test_app.py"
             }
         }
         stage('Deploy') {
@@ -29,7 +29,7 @@ pipeline {
 
     post {
         success {
-            echo "Build ${env.BUILD_NUMBER} zakonczony sukcesem — aplikacja dziala na porcie 5000."
+            echo "Build ${env.BUILD_NUMBER} zakonczony sukcesem."
         }
         failure {
             echo "Build ${env.BUILD_NUMBER} zakonczony bledem — sprawdz logi."
